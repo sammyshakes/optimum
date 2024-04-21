@@ -1,66 +1,15 @@
-## Foundry
+# OptimumAI ERC20 Token and MultiSend Contracts
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+This repository contains the smart contracts for the OptimumAI ERC20 token and the MultiSend feature, both written in Solidity.
 
-Foundry consists of:
+## OptimumAI ERC20 Token
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+The OptimumAI ERC20 token is an optimized ERC20 token with added features and functionality. The contract for this token can be found in [src/OptimumAI.sol](src/OptimumAI.sol).
 
-## Documentation
+## MultiSend Contract
 
-https://book.getfoundry.sh/
+The MultiSend contract allows for multiple transactions to be sent in a single batch, reducing the cost and complexity of sending multiple transactions. The contract for this feature can be found in [src/MultiSend.sol](src/MultiSend.sol).
 
-## Usage
+## License
 
-### Build
-
-```shell
-$ forge build
-```
-
-### Test
-
-```shell
-$ forge test
-```
-
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
