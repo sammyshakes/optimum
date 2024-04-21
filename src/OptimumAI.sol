@@ -66,7 +66,9 @@ interface IERC20 {
      *
      * Emits a {Transfer} event.
      */
-    function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
+    function transferFrom(address sender, address recipient, uint256 amount)
+        external
+        returns (bool);
 
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -184,7 +186,13 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
     /**
      * @dev See {IERC20-allowance}.
      */
-    function allowance(address owner, address spender) public view virtual override returns (uint256) {
+    function allowance(address owner, address spender)
+        public
+        view
+        virtual
+        override
+        returns (uint256)
+    {
         return _allowances[owner][spender];
     }
 
@@ -220,7 +228,12 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - the caller must have allowance for ``from``'s tokens of at least
      * `amount`.
      */
-    function transferFrom(address from, address to, uint256 amount) public virtual override returns (bool) {
+    function transferFrom(address from, address to, uint256 amount)
+        public
+        virtual
+        override
+        returns (bool)
+    {
         address spender = _msgSender();
         _spendAllowance(from, spender, amount);
         _transfer(from, to, amount);
@@ -259,7 +272,11 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - `spender` must have allowance for the caller of at least
      * `subtractedValue`.
      */
-    function decreaseAllowance(address spender, uint256 subtractedValue) public virtual returns (bool) {
+    function decreaseAllowance(address spender, uint256 subtractedValue)
+        public
+        virtual
+        returns (bool)
+    {
         address owner = _msgSender();
         uint256 currentAllowance = allowance(owner, spender);
         require(currentAllowance >= subtractedValue, "ERC20: decreased allowance below zero");
@@ -427,8 +444,12 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCallWithValue(address target, bytes memory data, uint256 value) internal returns (bytes memory) {
-        return functionCallWithValue(target, data, value, "Address: low-level call with value failed");
+    function functionCallWithValue(address target, bytes memory data, uint256 value)
+        internal
+        returns (bytes memory)
+    {
+        return
+            functionCallWithValue(target, data, value, "Address: low-level call with value failed");
     }
 
     /**
@@ -437,10 +458,12 @@ library Address {
      *
      * _Available since v3.1._
      */
-    function functionCallWithValue(address target, bytes memory data, uint256 value, string memory errorMessage)
-        internal
-        returns (bytes memory)
-    {
+    function functionCallWithValue(
+        address target,
+        bytes memory data,
+        uint256 value,
+        string memory errorMessage
+    ) internal returns (bytes memory) {
         require(address(this).balance >= value, "Address: insufficient balance for call");
         (bool success, bytes memory returndata) = target.call{value: value}(data);
         return verifyCallResultFromTarget(target, success, returndata, errorMessage);
@@ -452,7 +475,11 @@ library Address {
      *
      * _Available since v3.3._
      */
-    function functionStaticCall(address target, bytes memory data) internal view returns (bytes memory) {
+    function functionStaticCall(address target, bytes memory data)
+        internal
+        view
+        returns (bytes memory)
+    {
         return functionStaticCall(target, data, "Address: low-level static call failed");
     }
 
@@ -477,7 +504,10 @@ library Address {
      *
      * _Available since v3.4._
      */
-    function functionDelegateCall(address target, bytes memory data) internal returns (bytes memory) {
+    function functionDelegateCall(address target, bytes memory data)
+        internal
+        returns (bytes memory)
+    {
         return functionDelegateCall(target, data, "Address: low-level delegate call failed");
     }
 
@@ -560,11 +590,14 @@ library SafeERC20 {
     }
 
     function safeTransferFrom(IERC20 token, address from, address to, uint256 value) internal {
-        _callOptionalReturn(token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value));
+        _callOptionalReturn(
+            token, abi.encodeWithSelector(token.transferFrom.selector, from, to, value)
+        );
     }
 
     function _callOptionalReturn(IERC20 token, bytes memory data) private {
-        bytes memory returndata = address(token).functionCall(data, "SafeERC20: low-level call failed");
+        bytes memory returndata =
+            address(token).functionCall(data, "SafeERC20: low-level call failed");
         if (returndata.length > 0) {
             require(abi.decode(returndata, (bool)), "SafeERC20: ERC20 operation did not succeed");
         }
@@ -602,7 +635,7 @@ interface IDexFactory {
     function createPair(address tokenA, address tokenB) external returns (address pair);
 }
 
-contract Optimum is ERC20, Ownable {
+contract OptimumAI is ERC20, Ownable {
     mapping(address => bool) public exemptFromFees;
     mapping(address => bool) public exemptFromLimits;
 
@@ -631,7 +664,7 @@ contract Optimum is ERC20, Ownable {
 
     TxLimits public txLimits;
 
-    uint64 public constant FEE_DIVISOR = 10000;
+    uint64 public constant FEE_DIVISOR = 10_000;
 
     uint256 public launchBlock;
     bool public dynamicTaxOn;
@@ -672,7 +705,7 @@ contract Optimum is ERC20, Ownable {
 
     // constructor
 
-    constructor() ERC20("Optimum", "OAI") {
+    constructor() ERC20("OptimumAI", "OAI") {
         _mint(msg.sender, 10_000_000 * 1e18);
 
         address _v2Router;
@@ -683,11 +716,11 @@ contract Optimum is ERC20, Ownable {
         // @dev assumes WETH pair
         if (block.chainid == 1) {
             _v2Router = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
-        } else if (block.chainid == 5) {
-            _v2Router = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+        } else if (block.chainid == 11_155_111) {
+            _v2Router = 0xC532a74256D3Db42D0Bf7a0400fEFDbad7694008;
         } else if (block.chainid == 97) {
             _v2Router = 0xD99D1c33F9fC3444f8101754aBC46c52416550D1;
-        } else if (block.chainid == 42161) {
+        } else if (block.chainid == 42_161) {
             _v2Router = 0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506;
         } else {
             revert("Chain not configured");
@@ -695,9 +728,9 @@ contract Optimum is ERC20, Ownable {
 
         dexRouter = IDexRouter(_v2Router);
 
-        txLimits.transactionLimit = uint128(totalSupply() * 10 / 10000);
-        txLimits.walletLimit = uint128(totalSupply() * 10 / 10000);
-        swapTokensAtAmt = totalSupply() * 25 / 100000;
+        txLimits.transactionLimit = uint128(totalSupply() * 10 / 10_000);
+        txLimits.walletLimit = uint128(totalSupply() * 10 / 10_000);
+        swapTokensAtAmt = totalSupply() * 25 / 100_000;
 
         marketingAddress = 0xAc74aeD5035e627375584dAd0ef08f943F43b96c; // update
         devAddress = 0x1620e2338D3212C7bd3D7462d57B9b0A6978DF80; // update
@@ -798,8 +831,10 @@ contract Optimum is ERC20, Ownable {
         if (taxes.totalTax > 0) {
             TokensForTax memory tokensForTaxUpdate = tokensForTax;
             tax = uint128(amount * taxes.totalTax / FEE_DIVISOR);
-            tokensForTaxUpdate.tokensForLiquidity += uint80(tax * taxes.liquidityTax / taxes.totalTax / 1e9);
-            tokensForTaxUpdate.tokensForMarketing += uint80(tax * taxes.marketingTax / taxes.totalTax / 1e9);
+            tokensForTaxUpdate.tokensForLiquidity +=
+                uint80(tax * taxes.liquidityTax / taxes.totalTax / 1e9);
+            tokensForTaxUpdate.tokensForMarketing +=
+                uint80(tax * taxes.marketingTax / taxes.totalTax / 1e9);
             tokensForTaxUpdate.tokensForDev += uint80(tax * taxes.devTax / taxes.totalTax / 1e9);
             tokensForTax = tokensForTaxUpdate;
             super._transfer(from, address(this), tax);
@@ -813,14 +848,16 @@ contract Optimum is ERC20, Ownable {
         path[0] = address(this);
         path[1] = WETH;
 
-        dexRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(tokenAmt, 0, path, address(this), block.timestamp);
+        dexRouter.swapExactTokensForETHSupportingFeeOnTransferTokens(
+            tokenAmt, 0, path, address(this), block.timestamp
+        );
     }
 
     function convertTaxes() private {
         uint256 contractBalance = balanceOf(address(this));
         TokensForTax memory tokensForTaxMem = tokensForTax;
-        uint256 totalTokensToSwap =
-            tokensForTaxMem.tokensForLiquidity + tokensForTaxMem.tokensForMarketing + tokensForTaxMem.tokensForDev;
+        uint256 totalTokensToSwap = tokensForTaxMem.tokensForLiquidity
+            + tokensForTaxMem.tokensForMarketing + tokensForTaxMem.tokensForDev;
 
         if (contractBalance == 0 || totalTokensToSwap == 0) return;
 
@@ -829,7 +866,8 @@ contract Optimum is ERC20, Ownable {
         }
 
         if (tokensForTaxMem.tokensForLiquidity > 0) {
-            uint256 liquidityTokens = contractBalance * tokensForTaxMem.tokensForLiquidity / totalTokensToSwap;
+            uint256 liquidityTokens =
+                contractBalance * tokensForTaxMem.tokensForLiquidity / totalTokensToSwap;
             super._transfer(address(this), lpPair, liquidityTokens);
             try ILpPair(lpPair).sync() {} catch {}
             contractBalance -= liquidityTokens;
@@ -844,7 +882,9 @@ contract Optimum is ERC20, Ownable {
             bool success;
 
             if (tokensForTaxMem.tokensForDev > 0) {
-                (success,) = devAddress.call{value: ethBalance * tokensForTaxMem.tokensForDev / totalTokensToSwap}("");
+                (success,) = devAddress.call{
+                    value: ethBalance * tokensForTaxMem.tokensForDev / totalTokensToSwap
+                }("");
             }
 
             ethBalance = address(this).balance;
@@ -891,12 +931,21 @@ contract Optimum is ERC20, Ownable {
     }
 
     function updateSwapTokensAmt(uint256 newAmount) external onlyOwner {
-        require(newAmount >= (totalSupply() * 1) / 100000, "Swap amount cannot be lower than 0.001% total supply.");
-        require(newAmount <= (totalSupply() * 5) / 1000, "Swap amount cannot be higher than 0.5% total supply.");
+        require(
+            newAmount >= (totalSupply() * 1) / 100_000,
+            "Swap amount cannot be lower than 0.001% total supply."
+        );
+        require(
+            newAmount <= (totalSupply() * 5) / 1000,
+            "Swap amount cannot be higher than 0.5% total supply."
+        );
         swapTokensAtAmt = newAmount;
     }
 
-    function updateBuyTax(uint64 _marketingTax, uint64 _liquidityTax, uint64 _devTax) external onlyOwner {
+    function updateBuyTax(uint64 _marketingTax, uint64 _liquidityTax, uint64 _devTax)
+        external
+        onlyOwner
+    {
         Taxes memory taxes;
         taxes.marketingTax = _marketingTax;
         taxes.liquidityTax = _liquidityTax;
@@ -907,7 +956,10 @@ contract Optimum is ERC20, Ownable {
         buyTax = taxes;
     }
 
-    function updateSellTax(uint64 _marketingTax, uint64 _liquidityTax, uint64 _devTax) external onlyOwner {
+    function updateSellTax(uint64 _marketingTax, uint64 _liquidityTax, uint64 _devTax)
+        external
+        onlyOwner
+    {
         Taxes memory taxes;
         taxes.marketingTax = _marketingTax;
         taxes.liquidityTax = _liquidityTax;
@@ -957,7 +1009,10 @@ contract Optimum is ERC20, Ownable {
         transferDelayEnabled = false;
     }
 
-    function airdropToWallets(address[] calldata wallets, uint256[] calldata amountsInWei) external onlyOwner {
+    function airdropToWallets(address[] calldata wallets, uint256[] calldata amountsInWei)
+        external
+        onlyOwner
+    {
         require(wallets.length == amountsInWei.length, "arrays length mismatch");
         for (uint256 i = 0; i < wallets.length; i++) {
             super._transfer(msg.sender, wallets[i], amountsInWei[i]);
@@ -1032,7 +1087,8 @@ contract Optimum is ERC20, Ownable {
                 newSellTax.marketingTax = newSellTax.totalTax * 8 / 10;
                 newSellTax.liquidityTax = 0;
             }
-            newSellTax.devTax = newSellTax.totalTax - newSellTax.marketingTax - newSellTax.liquidityTax;
+            newSellTax.devTax =
+                newSellTax.totalTax - newSellTax.marketingTax - newSellTax.liquidityTax;
             sellTax = newSellTax;
         }
 

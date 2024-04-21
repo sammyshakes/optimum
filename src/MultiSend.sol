@@ -42,6 +42,7 @@ contract Escapable is Ownable(msg.sender), ReentrancyGuard {
 /// @notice `MultiSend` is a contract for sending multiple ETH/ERC20 Tokens to multiple addresses.
 contract MultiSend is Pausable, Escapable {
     using Address for address;
+    using SafeERC20 for IERC20;
 
     /// @notice Send to multiple addresses using two arrays which include the address and the amount.
     /// @param _addresses Array of addresses to send to
