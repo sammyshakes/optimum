@@ -1,6 +1,4 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// Includes openzeppelin (https://github.com/OpenZeppelin/openzeppelin-contracts/) code with MIT license
-
 pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -17,7 +15,11 @@ contract Escapable is Ownable(msg.sender), ReentrancyGuard {
 
     /// @notice The `escapeHatch()` should only be called as a last resort if a security issue is uncovered or something unexpected happened.
     /// @param _token to transfer, use 0x0 for ether
-    function escapeHatch(address _token, address payable _escapeHatchDestination) external onlyOwner nonReentrant {
+    function escapeHatch(address _token, address payable _escapeHatchDestination)
+        external
+        onlyOwner
+        nonReentrant
+    {
         require(_escapeHatchDestination != address(0), "Invalid destination address");
 
         if (_token == address(0)) {
@@ -66,10 +68,11 @@ contract MultiSend is Pausable, Escapable {
     /// @param _token The token to send
     /// @param _addresses Array of addresses to send to
     /// @param _amounts Array of token amounts to send
-    function multiTransferToken(address _token, address[] calldata _addresses, uint256[] calldata _amounts)
-        external
-        whenNotPaused
-    {
+    function multiTransferToken(
+        address _token,
+        address[] calldata _addresses,
+        uint256[] calldata _amounts
+    ) external whenNotPaused {
         require(_addresses.length == _amounts.length, "Address and amount array lengths must match");
         IERC20 token = IERC20(_token);
         uint256 totalRequired = 0;
