@@ -27,19 +27,30 @@ contract OptimumAISeedSaleVesting is Ownable(msg.sender) {
         token = IERC20(_token);
     }
 
-    /// @notice Initializes vesting for an investor
-    /// @param investor The address of the investor
-    /// @param totalAmount The total amount of tokens to be vested
-    /// @param startTime The start time of the vesting period
+    /// @notice Initializes vesting for multiple investors
+    /// @param investorsArray The addresses of the investors
+    /// @param totalAmounts The total amounts of tokens to be vested for each investor
+    /// @param startTimes The start times of the vesting period for each investor
     /// @dev Only the owner can call this function
-    function initializeVesting(address investor, uint256 totalAmount, uint256 startTime)
-        external
-        onlyOwner
-    {
-        require(totalAmount > 0, "OptimumAIVesting: totalAmount must be greater than 0");
-        investors[investor] =
-            Investor({totalAllocated: totalAmount, released: 0, vestingStart: startTime});
-        emit VestingInitialized(investor, totalAmount, startTime);
+    function initializeVesting(
+        address[] calldata investorsArray,
+        uint256[] calldata totalAmounts,
+        uint256[] calldata startTimes
+    ) external onlyOwner {
+        require(
+            investorsArray.length == totalAmounts.length && totalAmounts.length == startTimes.length,
+            "OptimumAIVesting: Array lengths must match"
+        );
+
+        for (uint256 i = 0; i < investorsArray.length; i++) {
+            require(totalAmounts[i] > 0, "OptimumAIVesting: Total amount must be greater than 0");
+            investors[investorsArray[i]] = Investor({
+                totalAllocated: totalAmounts[i],
+                released: 0,
+                vestingStart: startTimes[i]
+            });
+            emit VestingInitialized(investorsArray[i], totalAmounts[i], startTimes[i]);
+        }
     }
 
     /// @notice Allows an investor to claim their vested tokens
