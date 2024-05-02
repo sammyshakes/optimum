@@ -20,13 +20,12 @@ contract DeployMultisig is Script {
     function run() external {
         uint256 deployerPrivateKey = uint256(vm.envBytes32("DEPLOYER_PRIVATE_KEY"));
 
-        // requiredConfirmationAddress must also be in owners array
-        address[] memory owners = new address[](3);
+        // NOTE: requiredConfirmationAddress must also be in owners array
+        address[] memory owners = new address[](8);
         owners[0] = owner1;
         owners[1] = owner2;
         owners[2] = requiredConfirmationAddress;
 
-        //Deploy Tronic Master Contracts
         vm.startBroadcast(deployerPrivateKey);
 
         wallet = new MultiSigWallet(owners, requiredConfirmationAddress, numComfirmations);
