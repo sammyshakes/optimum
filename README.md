@@ -43,6 +43,30 @@ The MultiSend contract allows for multiple transactions to be sent in a single b
 
 The contract also inherits functionality from other contracts like `Ownable`, `ReentrancyGuard`, and `Pausable`, providing ownership management, protection against reentrancy attacks, and pausing functionality, respectively.
 
+## OptimumAISeedSaleVesting Contract
+
+`OptimumAISeedSaleVesting` contract:
+
+- **Token Vesting Management**: Manages the vesting of tokens for investors participating in a seed sale.
+- **Key Features**:
+  - **Token Distribution**: Handles the distribution of ERC20 tokens according to a vesting schedule.
+  - **Investor Struct**: Utilizes a struct to store each investor's total allocated tokens, released tokens, and the start time of their vesting period.
+  - **Events**:
+    - `VestingInitialized`: Emitted when vesting is initialized for an investor.
+    - `TokensClaimed`: Emitted when an investor claims their vested tokens.
+    - `EmergencyWithdrawal`: Emitted during the emergency withdrawal of tokens by the contract owner.
+- **Functionalities**:
+  - **Initialize Vesting**: Sets up vesting for a specific investor, defining the total token amount and the start time of vesting. Only callable by the contract owner.
+  - **Claim Tokens**: Allows investors to claim their vested tokens as per the schedule.
+  - **Calculate Claimable Amount**: Provides the amount of tokens an investor can currently claim, based on the time elapsed since the start of their vesting.
+  - **Calculate Released Amount**: Retrieves the total amount of tokens that have been released to an investor up to the current point.
+  - **Emergency Withdrawal**: Enables the contract owner to withdraw all tokens from the contract in case of emergencies. This function ensures that tokens can be recovered if needed.
+- **Access Control**:
+  - Only the contract owner can initialize vesting schedules and perform emergency withdrawals.
+- **Vesting Schedule**:
+  - **Initial Release**: 50% of the allocated tokens are available immediately after the Token Generation Event (TGE).
+  - **Vesting Duration**: The remaining 50% of tokens are vested linearly over 3 months, allowing for partial claims at any point during this period.
+
 ## License
 
 This project is licensed under the MIT License.
