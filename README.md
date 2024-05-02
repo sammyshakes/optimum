@@ -45,6 +45,8 @@ The contract also inherits functionality from other contracts like `Ownable`, `R
 
 ## OptimumAISeedSaleVesting Contract
 
+The `OptimumAISeedSaleVesting` contract manages the vesting of tokens for investors participating in a seed sale. The contract allows for the distribution of ERC20 tokens according to a vesting schedule, enabling investors to claim their vested tokens over time. The contract owner can initialize vesting schedules, and investors can claim their vested tokens based on the time elapsed since the start of their vesting period. The contract also includes an emergency withdrawal function to recover tokens in case of emergencies. The contract for this feature can be found in [src/OptimumAISeedSaleVesting.sol](src/OptimumAISeedSaleVesting.sol).
+
 `OptimumAISeedSaleVesting` contract:
 
 - **Token Vesting Management**: Manages the vesting of tokens for investors participating in a seed sale.
