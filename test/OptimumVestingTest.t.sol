@@ -5,18 +5,10 @@ import {Test} from "forge-std/Test.sol";
 import {OptimumAISeedSaleVesting} from "../src/OptimumAISeedSaleVesting.sol";
 import {MockERC20} from "./MockERC20.sol";
 
-//interface for IERC20
-interface IERC20 {
-    function transfer(address recipient, uint256 amount) external returns (bool);
-    function approve(address spender, uint256 amount) external returns (bool);
-}
-
 contract OptimumVestingTest is Test {
     OptimumAISeedSaleVesting public vestingContract;
     MockERC20 public token;
     address investor = address(0x123);
-
-    uint256 public constant VESTING_DURATION = 3 * 30 days; // 90 days total
 
     function setUp() public {
         token = new MockERC20();
@@ -48,11 +40,14 @@ contract OptimumVestingTest is Test {
     }
 
     function testLinearVestingProgression() public {
+        // Get initial vesting start time
+        (,, uint256 vestingStart) = vestingContract.investors(investor);
+
         // Define test checkpoints and their expected vested amounts
         uint256[] memory checkpoints = new uint256[](3);
-        checkpoints[0] = block.timestamp + 15 days; // Halfway through the first month
-        checkpoints[1] = block.timestamp + 45 days; // One and a half months in
-        checkpoints[2] = block.timestamp + 75 days; // Two and a half months in
+        checkpoints[0] = vestingStart + 15 days; // Halfway through the first month
+        checkpoints[1] = vestingStart + 45 days; // One and a half months in
+        checkpoints[2] = vestingStart + 75 days; // Two and a half months in
 
         uint256 totalTokens = 1000 ether;
         uint256 initialRelease = totalTokens * 50 / 100; // 500 ether released at TGE
@@ -60,9 +55,9 @@ contract OptimumVestingTest is Test {
 
         uint256[] memory expectedAmounts = new uint256[](3);
         for (uint256 i = 0; i < checkpoints.length; i++) {
-            uint256 timeElapsedSinceStart = checkpoints[i] - vestingContract._vestingStart(investor); // assuming _vestingStart is public for this calculation
-            expectedAmounts[i] =
-                initialRelease + (remainingTokens * timeElapsedSinceStart) / (VESTING_DURATION); // VESTING_DURATION should be total vesting time in seconds
+            uint256 timeElapsedSinceStart = checkpoints[i] - vestingStart;
+            expectedAmounts[i] = initialRelease
+                + (remainingTokens * timeElapsedSinceStart) / vestingContract.VESTING_DURATION();
         }
 
         for (uint256 i = 0; i < checkpoints.length; i++) {
