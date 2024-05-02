@@ -1,6 +1,6 @@
 # OptimumAI Smart Contracts
 
-This repository contains the smart contracts for the OptimumAI ERC20 token and the MultiSend feature, both written in Solidity.
+This repository contains the smart contracts for OptimumAI written in Solidity.
 
 ## OptimumAI ERC20 Token
 
