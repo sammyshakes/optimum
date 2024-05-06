@@ -25,6 +25,14 @@ contract OptimumKOLVesting is Ownable(msg.sender) {
         token = IERC20(_token);
     }
 
+    /// @notice Initializes vesting for a KOL
+    /// @param kolAddress The address of the KOL
+    /// @param totalTokenAmount The total amount of tokens to be vested
+    /// @param cliffDuration The duration of the cliff period in seconds
+    /// @param vestingDuration The duration of the vesting period in seconds
+    /// @param immediateReleasePercentage The percentage of tokens to be released immediately
+    /// @param startTime The start time of the vesting period
+    /// @dev Only the owner can call this function
     function initializeVesting(
         address kolAddress,
         uint256 totalTokenAmount,
@@ -51,6 +59,8 @@ contract OptimumKOLVesting is Ownable(msg.sender) {
         emit VestingInitialized(kolAddress, totalTokenAmount, startTime);
     }
 
+    /// @notice Allows a KOL to claim their vested tokens
+    /// @dev The KOL must have tokens available to claim
     function claimTokens() external {
         VestingSchedule storage schedule = vestingSchedules[msg.sender];
         require(block.timestamp >= schedule.startTime, "Vesting has not started yet");
@@ -63,6 +73,9 @@ contract OptimumKOLVesting is Ownable(msg.sender) {
         emit TokensClaimed(msg.sender, amount);
     }
 
+    /// @notice Returns the amount of tokens that a KOL can claim
+    /// @param kol The address of the KOL
+    /// @return The amount of tokens that can be claimed
     function claimableAmount(address kol) public view returns (uint256) {
         VestingSchedule storage schedule = vestingSchedules[kol];
 
@@ -94,6 +107,12 @@ contract OptimumKOLVesting is Ownable(msg.sender) {
         }
     }
 
+    /// @notice Adjusts the vesting schedule for a KOL
+    /// @param kol The address of the KOL
+    /// @param newCliffDuration The new duration of the cliff period in seconds
+    /// @param newVestingDuration The new duration of the vesting period in seconds
+    /// @param newImmediateReleasePercentage The new percentage of tokens to be released immediately
+    /// @dev Only the owner can call this function
     function adjustVestingSchedule(
         address kol,
         uint256 newCliffDuration,
