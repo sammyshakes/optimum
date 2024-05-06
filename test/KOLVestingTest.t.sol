@@ -2,17 +2,17 @@
 pragma solidity ^0.8.0;
 
 import {Test} from "forge-std/Test.sol";
-import {KOLVestingContract} from "../src/KOLVestingContract.sol";
+import {OptimumKOLVesting} from "../src/OptimumKOLVesting.sol";
 import {MockERC20} from "./MockERC20.sol";
 
 contract KOLVestingTest is Test {
-    KOLVestingContract public vestingContract;
+    OptimumKOLVesting public vestingContract;
     MockERC20 public token;
     address[] public investors;
 
     function setUp() public {
         token = new MockERC20();
-        vestingContract = new KOLVestingContract(address(token));
+        vestingContract = new OptimumKOLVesting(address(token));
         vestingContract.transferOwnership(address(this));
 
         uint256 startTime = block.timestamp + 1 days; //start time is after first day

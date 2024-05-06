@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract KOLVestingContract is Ownable(msg.sender) {
+contract OptimumKOLVesting is Ownable(msg.sender) {
     struct VestingSchedule {
         uint256 totalAllocated;
         uint256 released;
