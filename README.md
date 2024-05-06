@@ -69,6 +69,45 @@ The `OptimumAISeedSaleVesting` contract manages the vesting of tokens for invest
   - **Initial Release**: 50% of the allocated tokens are available immediately after the Token Generation Event (TGE).
   - **Vesting Duration**: The remaining 50% of tokens are vested linearly over 3 months, allowing for partial claims at any point during this period.
 
+## OptimumAIKOLVesting Contract
+
+`OptimumAIKOLVesting` contract manages the vesting of tokens for Key Opinion Leaders (KOLs) participating in the OptimumAI ecosystem. The contract allows the contract owner to initialize vesting schedules for KOLs, enabling them to claim their vested tokens over time. The contract owner can adjust the vesting schedules for KOLs as needed. The contract for this feature can be found in [src/OptimumAIKOLVesting.sol](src/OptimumAIKOLVesting.sol).:
+
+- **Vesting Schedule Struct**:
+
+  - Defines a struct `VestingSchedule` to hold details of each vesting schedule, including total allocated tokens, released tokens, cliff duration, vesting duration, immediate release percentage, and start time.
+
+- **Initialization**:
+
+  - Allows the contract owner to initialize vesting schedules for Key Opinion Leaders (KOLs).
+  - Inputs: KOL address, total token amount, cliff duration, vesting duration, immediate release percentage, and start time.
+  - Checks for valid inputs and sets up the vesting schedule.
+
+- **Claim Tokens**:
+
+  - Allows KOLs to claim vested tokens.
+  - Validates if vesting has started and if tokens are claimable based on the current timestamp.
+  - Calculates the claimable amount based on the vesting schedule.
+  - Transfers the claimable tokens to the KOL.
+
+- **Claimable Amount Calculation**:
+
+  - Calculates the amount of tokens claimable by a KOL at a given timestamp based on their vesting schedule.
+  - Considers immediate release, cliff duration, vesting duration, and elapsed time since the start of vesting.
+
+- **Adjust Vesting Schedule**:
+
+  - Allows the contract owner to adjust the vesting schedule for a KOL.
+  - Inputs: KOL address, new cliff duration, new vesting duration, new immediate release percentage.
+  - Updates the vesting schedule parameters for the specified KOL.
+
+- **Events**:
+
+  - Emits events for vesting initialization, tokens claimed, and vesting schedule updates.
+
+- **Constructor**:
+  - Initializes the contract with the address of the OptimumAI token.
+
 ## License
 
 This project is licensed under the MIT License.
