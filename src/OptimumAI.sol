@@ -706,7 +706,7 @@ contract OptimumAI is ERC20, Ownable {
     // constructor
 
     constructor() ERC20("OptimumAI", "OAI") {
-        _mint(msg.sender, 10_000_000 * 1e18);
+        _mint(msg.sender, 5_000_000 * 1e18);
 
         address _v2Router;
 
