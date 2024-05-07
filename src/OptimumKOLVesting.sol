@@ -3,8 +3,9 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/Pausable.sol";
 
-contract OptimumKOLVesting is Ownable(msg.sender) {
+contract OptimumKOLVesting is Ownable(msg.sender), Pausable {
     struct VestingSchedule {
         uint256 totalAllocated;
         uint256 released;
@@ -61,7 +62,7 @@ contract OptimumKOLVesting is Ownable(msg.sender) {
 
     /// @notice Allows a KOL to claim their vested tokens
     /// @dev The KOL must have tokens available to claim
-    function claimTokens() external {
+    function claimTokens() external whenNotPaused {
         VestingSchedule storage schedule = vestingSchedules[msg.sender];
         require(block.timestamp >= schedule.startTime, "Vesting has not started yet");
 
@@ -127,5 +128,15 @@ contract OptimumKOLVesting is Ownable(msg.sender) {
         schedule.immediateReleasePercentage = newImmediateReleasePercentage;
 
         emit VestingScheduleUpdated(kol);
+    }
+
+    /// @notice Allows the owner to pause the contract
+    function pause() external onlyOwner {
+        _pause();
+    }
+
+    /// @notice Allows the owner to unpause the contract
+    function unpause() external onlyOwner {
+        _unpause();
     }
 }

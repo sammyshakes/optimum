@@ -10,13 +10,19 @@ import {OptimumKOLVesting} from "../src/OptimumKOLVesting.sol";
 contract Deploy is Script {
     uint256 deployerPrivateKey = uint256(vm.envBytes32("DEPLOYER_PRIVATE_KEY"));
 
+    OptimumAI public optimum;
+
     function run() external {
         vm.startBroadcast(deployerPrivateKey);
-        new OptimumAI();
+        optimum = new OptimumAI();
         new MultiSend();
+        new OptimumAISeedSaleVesting(address(optimum));
+        new OptimumKOLVesting(address(optimum));
 
         console2.log("Optimum deployed");
         console2.log("MultiSend deployed");
+        console2.log("OptimumAISeedSaleVesting deployed");
+        console2.log("OptimumKOLVesting deployed");
 
         vm.stopBroadcast();
     }
